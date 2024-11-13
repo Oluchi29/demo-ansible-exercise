@@ -61,8 +61,31 @@
       az: "{{zone2}}"
       state: "{{state}}"
       cidr: "{{PrivSub2Cidr}}"
-      map_public: yes}
+      map_public: yes
 
       tags:
        Name: vprofile-privsub2
      register: privsub2_out
+
+   - name: Internet Gateway Setup
+     ec2_vpc_igw:
+      vpc_id: "{{vpcout.vpc.id}}"
+      region: "{{region}}"
+      state: "{{state}}"
+      tags:
+       Name: vprofile-igw
+     register: igw_out
+
+   - name: Setup Public Subnet Route Table
+     ec2_vpc_route_table:
+      vpc_id: "{{vpcout.vpc.id}}"
+      region: "{{region}}"
+      tags:
+       Name: Vprofile-PubRT
+      subnets:
+       - "{{ pubsub1_out.subnet.id }}"
+       - "{{ pubsub2_out.subnet.id }}"
+      routes:
+       - dest: 0.0.0.0/0
+         gateway_id: "{{ igw_out.gateway_id }}"
+     register: pubRT_out
