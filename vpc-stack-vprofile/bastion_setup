@@ -1,0 +1,8 @@
+bastion_setup file:
+bastion_ami: ami-0866a3c8686eaeeba # Amazon Linux-1 AMI-ID from us-east-1 region
+region: us-east-1
+MYIP:  172.19.144.1/32
+keyName: vprofile-key
+instanceType: t2.micro
+#Once these files are ready commit/push to them GitHub, clone this repository in our
+#Ansible server.
